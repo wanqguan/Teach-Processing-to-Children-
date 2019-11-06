@@ -1,0 +1,54 @@
+add_library('fisica')
+
+
+from my_module import *
+from random import random
+
+
+ 
+def setup():
+    global world
+    size(300, 300)
+    Fisica.init(this)
+    world = FWorld()
+    world.setEdges()
+    
+    ball = FCircle(20)
+    set_fbody(ball, pos=(200, 200))
+    world.add(ball)
+    world.setContactListener(ContactListener())
+    
+def draw():
+    background(255)
+    world.draw()
+    world.step()
+    
+    
+def mousePressed():
+    ball = FCircle(10 + 20*random())
+    ball.setFilterBits(1)
+    set_fbody(ball, pos=(mouseX, mouseY), v=(150-300*random(), 150-300*random()), 
+              rest=1, fill = (255-100 * random(), 100, 100))
+    world.add(ball)
+    
+
+
+class ContactListener(FContactAdapter):
+    def contactStarted(self, c):
+        b1 = c.getBody1()
+        b2 = c.getBody2()
+        if not b1.isStatic(): 
+            if b1.getSize()>3:
+                b1.setSize(b1.getSize()-2)
+                b1.setFill(b1.getFillColor()-0.1)
+            else:
+                world.remove(b1)    
+        if not b2.isStatic(): 
+            if b2.getSize()>3:
+                b2.setSize(b2.getSize()-2)
+                b2.setFill(b2.getFillColor()-0.1)
+            else:
+                world.remove(b2)    
+
+
+
