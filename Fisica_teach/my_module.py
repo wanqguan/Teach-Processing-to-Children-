@@ -1,5 +1,5 @@
 def set_fbody(fbody, pos=None, v=None, f=None, dens=None, damp=None, 
-                  rest=None, fric=None, stroke=None, fill=None, img=None):
+                  rest=None, fric=None, stroke=None, fill=None, img=None, sensor=None, static=None):
     if pos:
         fbody.setPosition(*pos)
     if v:
@@ -20,3 +20,7 @@ def set_fbody(fbody, pos=None, v=None, f=None, dens=None, damp=None,
         fbody.setFill(*fill)
     if img:
         fbody.attachImage(img)
+    if sensor:
+        fbody.setSensor(True)
+    if static:
+        fbody.setStatic(True)
