@@ -15,9 +15,15 @@ def set_fbody(fbody, pos=None, v=None, f=None, dens=None, damp=None,
     if fric:
         fbody.setFriction(fric)
     if stroke:
-        fbody.setStroke(*stroke)
+        if stroke == -1:
+            fbody.setNoStroke()
+        else:
+            fbody.setStroke(*stroke)
     if fill:
-        fbody.setFill(*fill)
+        if fill == -1:
+            fbody.setNoFill()
+        else:
+            fbody.setFill(*fill)
     if img:
         fbody.attachImage(img)
     if sensor:
