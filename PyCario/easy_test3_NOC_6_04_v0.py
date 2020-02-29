@@ -102,7 +102,7 @@ class PVector(Vector2):
         return self.magnitude()
 
     def heading2D(self):
-        return self.angle_to(PVector(1, 0))
+        return self.angle_to(PVector(0, 1))
 
     def add(self, *arg):
         if len(arg) == 1:
@@ -133,18 +133,19 @@ class FlowField():
     def init(self):
         self.field = []
         xoff = 0
-        xrand = Prandom(0, 100)
-        yrand = Prandom(0, 100)
+        xrand = Prandom(0, 1)
+        yrand = Prandom(0, 1)
         for i in range(self.cols):
             yoff = 0
             tmp = []
             for j in range(self.rows):
                 theta = Pmap(noise(xoff+xrand, yoff+yrand), 0, 1, 0, 2 * pi)
+                assert theta < 2 * pi
                 # Polar to cartesian coordinate transformation to get x and y components of the vector
                 tmp.append(PVector(cos(theta), sin(theta)))
-                yoff += 0.1
+                yoff += 0.01
             self.field.append(tmp)
-            xoff += 0.1
+            xoff += 0.01
 
     def display(self):
         # fill(0, 1, 0)
@@ -155,11 +156,11 @@ class FlowField():
 
     def drawVector(self, v, x, y, scayl):
         pushMatrix()
-        arrowsize = 4
         translate(x, y)
         rotate(v.heading2D())
         leg = v.mag()*scayl
         line(0, 0, leg, 0)
+        arrowsize = 4
         line(leg, 0, leg-arrowsize, +arrowsize/2)
         line(leg, 0, leg-arrowsize, -arrowsize/2)
         popMatrix()
@@ -265,8 +266,7 @@ def update():
     background(1, 1, 1)
     fill(1, 0, 0)
     strokeWeight(0.003)
-    circle(20, 20, 20)
-    flowfield.display()
+    # flowfield.display()
     for v in vehicles:
         v.follow(flowfield)
         v.run()
