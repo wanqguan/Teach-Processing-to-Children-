@@ -46,6 +46,14 @@ def rotate(angle):
     ctx.rotate(angle)
 
 
+def pushMatrix():
+    ctx.save()
+
+
+def popMatrix():
+    ctx.restore()
+
+
 def strokeWeight(k):
     ctx.set_line_width(k)
 
@@ -125,11 +133,13 @@ class FlowField():
     def init(self):
         self.field = []
         xoff = 0
+        xrand = Prandom(0, 100)
+        yrand = Prandom(0, 100)
         for i in range(self.cols):
             yoff = 0
             tmp = []
             for j in range(self.rows):
-                theta = Pmap(noise(xoff, yoff), 0, 1, 0, 2 * pi)
+                theta = Pmap(noise(xoff+xrand, yoff+yrand), 0, 1, 0, 2 * pi)
                 # Polar to cartesian coordinate transformation to get x and y components of the vector
                 tmp.append(PVector(cos(theta), sin(theta)))
                 yoff += 0.1
@@ -261,9 +271,8 @@ def update():
         v.follow(flowfield)
         v.run()
     if mousePressed:
+        flowfield.init()
         circle(mouseX, mouseY, 20)
-        line(0, 0, mouseX, mouseY)
-        line(mouseX, mouseY, width, height)
 
 
 def main():
